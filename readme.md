@@ -13,9 +13,12 @@ this library implements `Array`, `String`, and `Object` from javascript to make 
 Array
 -----
 
-does not override the `__index` method so you can pass arrays to other lua
-functions without anything breaking. this means the `[]` operator is 1-based
-indexing. use the `Array:at()` method for 0 based indexing.
+does not override the `__index` or `__pairs` methods so you can pass arrays to other lua
+functions without anything breaking. this means the `[]` operator and `pairs()` is 1-based
+indexing.
+
+use the `Array:at()` method for 0 based indexing.
+use `for i, v in array` without wrapping with `pairs` for zero-based iteration.
 
 ### usage
 ```lua
