@@ -20,8 +20,14 @@ indexing. use the `Array:at()` method for 0 based indexing.
 ### usage
 ```lua
 local Array = require("Array")
-local array = Array({1, 2, 3, 4})
-print(array:at(0)) -- prints "1"
+local array = Array({"a", "b", "c"})
+print(array:at(0)) -- prints "a"
+
+-- prints "0 a", "1 b", "2 c"
+for i, v in array do
+    print(i, v)
+end
+
 ```
 
 ### supported methods:
