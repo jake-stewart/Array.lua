@@ -29,7 +29,7 @@ local array = Array({"a", "b", "c"})
 print(array:at(0)) -- prints "a"
 
 -- prints "0 a", "1 b", "2 c"
-for v, i in array do
+for i, v in array do
     print(i, v)
 end
 
