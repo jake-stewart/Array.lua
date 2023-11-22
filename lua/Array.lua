@@ -1,4 +1,4 @@
---- @class Array
+--- @class Array<T>
 local Array = {}
 
 local function asArray(value)
@@ -14,9 +14,9 @@ local function clampWrapIndex(n, max)
 end
 
 ---@param table table
----@param start number | nil
----@param _end number | nil
----@return number, number
+---@param start integer | nil
+---@param _end integer | nil
+---@return integer, integer
 local function range(table, start, _end)
     return clampWrapIndex(start and start + 1 or 1, #table),
         clampWrapIndex(_end and _end + 1 or #table, #table)
@@ -31,7 +31,7 @@ end
 
 ---Combines two or more arrays. This method returns a new array without modifying any existing arrays.
 ---@param t table
----@param index number
+---@param index integer
 function Array.at(t, index)
     if index then
         if index < 0 then
@@ -45,7 +45,7 @@ end
 ---Appends new elements to the end of an array, and returns the length of the array.
 ---@param t table
 ---@param ... any
----@return number
+---@return integer
 function Array.push(t, ...)
     for _, value in ipairs({...}) do
         table.insert(t, asArray(value))
@@ -72,7 +72,7 @@ end
 ---Inserts new elements at the start of an array, and returns the new length of the array.
 ---@param t table
 ---@param ... any
----@return number
+---@return integer
 function Array.unshift(t, ...)
     for _, value in ... do
         table.insert(t.value, 1, asArray(value))
@@ -96,8 +96,8 @@ end
 
 ---Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
 ---@param t table
----@param start number
----@param deleteCount number | nil
+---@param start integer
+---@param deleteCount integer | nil
 ---@param ... any
 ---@return table
 function Array.splice(t, start, deleteCount, ...)
@@ -141,7 +141,7 @@ function Array.sort(t, comp)
 end
 
 ---@param t table
----@param callback fun(value: any, key: number): nil
+---@param callback fun(value: any, key: integer): nil
 ---@return nil
 function Array.forEach(t, callback)
     for key, value in ipairs(t) do
@@ -150,7 +150,7 @@ function Array.forEach(t, callback)
 end
 
 ---@param t table
----@param callback fun(value: any, key: number): nil
+---@param callback fun(value: any, key: integer): nil
 ---@return table
 function Array.map(t, callback)
     local mapped = {}
@@ -161,7 +161,7 @@ function Array.map(t, callback)
 end
 
 ---@param t table
----@param callback fun(value: any, key: number): nil
+---@param callback fun(value: any, key: integer): nil
 ---@return table
 function Array.filter(t, callback)
     local filtered = {}
@@ -176,8 +176,8 @@ end
 ---Returns the index of the first occurrence of a value in an array, or -1 if it is not present.
 ---@param t table
 ---@param searchElement any
----@param fromIndex number | nil
----@return number
+---@param fromIndex integer | nil
+---@return integer
 function Array.indexOf(t, searchElement, fromIndex)
     for i = fromIndex and fromIndex + 1 or 1, #t do
         if t[i] == searchElement then
@@ -190,8 +190,8 @@ end
 ---Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.
 ---@param t table
 ---@param searchElement any
----@param fromIndex number | nil
----@return number
+---@param fromIndex integer | nil
+---@return integer
 function Array.lastIndexOf(t, searchElement, fromIndex)
     for i = fromIndex and fromIndex + 1 or #t, 1, -1 do
         if t[i] == searchElement then
@@ -216,7 +216,7 @@ end
 ---Calls the specified callback function for all the elements in an array.
 ---The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 ---@param t table
----@param callback fun(current: any, total: any, idx: number): nil
+---@param callback fun(current: any, total: any, idx: integer): nil
 ---@param initial any
 ---@return any
 function Array.reduce(t, callback, initial)
@@ -228,7 +228,7 @@ end
 
 ---Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 ---@param t table
----@param callback fun(current: any, total: any, idx: number): nil
+---@param callback fun(current: any, total: any, idx: integer): nil
 ---@param initial any
 ---@return any
 function Array.reduceRight(t, callback, initial)
@@ -240,7 +240,7 @@ end
 
 ---Returns the value of the first element in the array where predicate is true, and undefined otherwise.
 ---@param t table
----@param predicate fun(value: any, index: number): boolean
+---@param predicate fun(value: any, index: integer): boolean
 ---@return any
 function Array.find(t, predicate)
     for key, value in ipairs(t) do
@@ -253,8 +253,8 @@ end
 
 ---Returns the index of the first element in the array where predicate is true, and -1 otherwise.
 ---@param t table
----@param predicate fun(value: any, index: number): boolean
----@return number
+---@param predicate fun(value: any, index: integer): boolean
+---@return integer
 function Array.findIndex(t, predicate)
     for key, value in ipairs(t) do
         if predicate(value, key - 1) then
@@ -293,8 +293,8 @@ end
 ---Changes all array elements from start to _end index to a static value and returns the modified array.
 ---@param t table
 ---@param value any
----@param start number | nil # index to start filling the array at. If start is negative, it is treated as length+start where length is the length of the array.
----@param _end number | nil # index to stop filling the array at. If end is negative, it is treated as length+end.
+---@param start integer | nil # index to start filling the array at. If start is negative, it is treated as length+start where length is the length of the array.
+---@param _end integer | nil # index to stop filling the array at. If end is negative, it is treated as length+end.
 ---@return table
 function Array.fill(t, value, start, _end)
     start, _end = range(t, start, _end)
@@ -306,7 +306,7 @@ end
 
 ---Determines whether all the members of an array satisfy the specified test.
 ---@param t table
----@param predicate fun(value: any, index: number): boolean
+---@param predicate fun(value: any, index: integer): boolean
 ---@return boolean
 function Array.every(t, predicate)
     for key, value in ipairs(t) do
@@ -319,7 +319,7 @@ end
 
 ---Determines whether the specified callback function returns true for any element of an array.
 ---@param t table
----@param predicate fun(value: any, index: number): boolean
+---@param predicate fun(value: any, index: integer): boolean
 ---@return boolean
 function Array.some(t, predicate)
     for key, value in ipairs(t) do
@@ -331,9 +331,9 @@ function Array.some(t, predicate)
 end
 
 ---@param t table
----@param target number
----@param start number
----@param _end number | nil
+---@param target integer
+---@param start integer
+---@param _end integer | nil
 function Array.copyWithin(t, target, start, _end)
     target = clampWrapIndex(target + 1, #t)
     start, _end = range(t, start, _end)
@@ -346,6 +346,7 @@ end
 Array.__index = Array
 
 -- iterator, call using `for i, v in array`
+--- @return number, number
 function Array.__call(t, _, i)
     i = (i or -1) + 1
     local item = t[i + 1]
@@ -354,6 +355,7 @@ function Array.__call(t, _, i)
     end
 end
 
+--- @generic T
 --- @param t table | nil
 --- @return Array
 return function(t)

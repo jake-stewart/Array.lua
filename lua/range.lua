@@ -3,10 +3,10 @@ local Array = require("Array")
 --- @param start integer
 --- @param stop integer | nil
 --- @param step integer | nil
---- @return table
---- @overload fun(stop: integer): table
---- @overload fun(start: integer, stop: integer): table
-local function range(start, stop, step)
+--- @return Array
+--- @overload fun(stop: integer): Array
+--- @overload fun(start: integer, stop: integer): Array
+return function(start, stop, step)
     start, stop = stop and start or 0, stop or start
     step = step or 1
     local t = {}
@@ -15,5 +15,3 @@ local function range(start, stop, step)
     end
     return Array(t)
 end
-
-return range

@@ -1,19 +1,17 @@
 local Array = require("Array")
 
-local String = {}
-
 --- @param s string
 --- @param start number
 --- @param _end number
 --- @return string
-function String.slice(s, start, _end)
+string.slice = string.slice or function(s, start, _end)
     return string.sub(s, start + 1, _end + 1)
 end
 
 --- @param s string
 --- @param separator string
---- @return table
-function String.split(s, separator)
+--- @return Array
+string.split = string.split or function(s, separator)
     local result = {}
     for match in (s .. separator):gmatch("(.-)" .. separator) do
         table.insert(result, match)
@@ -23,35 +21,35 @@ end
 
 --- @param s string
 --- @return string
-function String.trim(s)
+string.trim = string.trim or function(s)
     return string.match(s, "^%s*(.*%S)") or ""
 end
 
 --- @param s string
 --- @return string
-function String.trimEnd(s)
+string.trimEnd = string.trimEnd or function(s)
     return string.match(s, "^%s*(.*)")
 end
 
 --- @param s string
 --- @return string
-function String.trimStart(s)
+string.trimStart = string.trimStart or function(s)
     return string.match(s, "(.-)%s*$")
 end
 
---- String.repeat(), but 'repeat' is a reserved word
---- @param s string
---- @param n number
---- @return string
-function String.rep(s, n)
-    return string.rep(s, n)
-end
+-- --- string.repeat(), but 'repeat' is a reserved word
+-- --- @param s string
+-- --- @param n number
+-- --- @return string
+-- string.rep = string.rep or function(s, n)
+--     return string.rep(s, n)
+-- end
 
 --- @param s string
 --- @param search string
 --- @param replace string
 --- @return string
-function String.replace(s, search, replace)
+string.replace = string.replace or function(s, search, replace)
     local result, _ = string.gsub(s, search, replace)
     return result
 end
@@ -60,7 +58,7 @@ end
 --- @param length number
 --- @param padChar string
 --- @return string
-function String.padEnd(s, length, padChar)
+string.padEnd = string.padEnd or function(s, length, padChar)
     local padLength = length - #s
     if padLength > 0 then
         return s .. string.rep(padChar, padLength)
@@ -73,7 +71,7 @@ end
 --- @param length number
 --- @param padChar string
 --- @return string
-function String.padStart(s, length, padChar)
+string.padStart = string.padStart or function(s, length, padChar)
     local padLength = length - #s
     if padLength > 0 then
         return string.rep(padChar, padLength) .. s
@@ -82,17 +80,17 @@ function String.padStart(s, length, padChar)
     end
 end
 
---- @param s string
---- @param pattern string
---- @return string | nil
-function String.match(s, pattern)
-    return string.match(s, pattern) or nil
-end
+-- --- @param s string
+-- --- @param pattern string
+-- --- @return string | nil
+-- string.match = string.match or function(s, pattern)
+--     return string.match(s, pattern) or nil
+-- end
 
 --- @param s string
 --- @param substring any
 --- @return boolean
-function String.includes(s, substring)
+string.includes = string.includes or function(s, substring)
     return string.find(s, substring, 1, true) ~= nil
 end
 
@@ -100,7 +98,7 @@ end
 --- @param substring string
 --- @param startAt number | nil
 --- @return number
-function String.indexOf(s, substring, startAt)
+string.indexOf = string.indexOf or function(s, substring, startAt)
     local _, index = string.find(s, substring, (startAt or 0) + 1, true)
     return (index or 0) - 1
 end
@@ -108,7 +106,7 @@ end
 --- @param s string
 --- @param substring string
 --- @return number
-function String.lastIndexOf(s, substring)
+string.lastIndexOf = string.lastIndexOf or function(s, substring)
     local index = -1
     local i = 1
     while i <= #s do
@@ -124,27 +122,27 @@ end
 
 --- @param s string
 --- @return string
-function String.toLowerCase(s)
+string.toLowerCase = string.toLowerCase or function(s)
     return string.lower(s)
 end
 
 --- @param s string
 --- @return string
-function String.toUpperCase(s)
+string.toUpperCase = string.toUpperCase or function(s)
     return string.upper(s)
 end
 
 --- @param s string
 --- @param prefix string
 --- @return boolean
-function String.startsWith(s, prefix)
+string.startsWith = string.startsWith or function(s, prefix)
     return string.sub(s, 1, #prefix) == prefix
 end
 
 --- @param s string
 --- @param suffix string
 --- @return boolean
-function String.endsWith(s, suffix)
+string.endsWith = string.endsWith or function(s, suffix)
     return suffix == "" or string.sub(s, -#suffix) == suffix
 end
 
@@ -152,24 +150,19 @@ end
 --- @param start number
 --- @param _end number | nil
 --- @return string
-function String.substring(s, start, _end)
+string.substring = string.substring or function(s, start, _end)
     return string.sub(s, start + 1, (_end or #s - 1) + 1)
 end
 
 --- @param s string
 --- @param index number
 --- @return string
-function String.at(s, index)
+string.at = string.at or function(s, index)
     return string.sub(s, index + 1, index + 1)
 end
 
--- ensure not overwriting existing method
-for k, v in pairs(String) do
-    string[k] = string[k] or v
-end
-
 --- @param s string
---- @return any
+--- @return string
 return function(s)
     assert(type(s) == "string", "String constructor requires string argument")
     return s
