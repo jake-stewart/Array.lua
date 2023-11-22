@@ -335,6 +335,15 @@ end
 
 Array.__index = Array
 
+-- iterator, call using `for i, v in array`
+function Array.__call(t, _, i)
+    i = (i or -1) + 1
+    local item = t[i + 1]
+    if item then
+        return i, item
+    end
+end
+
 return setmetatable(Array, {
     __call = function(_, t)
         assert(type(t) == "table", "Array constructor requires table argument")
