@@ -1,5 +1,5 @@
-lua-js
-======
+sane.lua
+========
 
 i don't like lua.
 
@@ -8,8 +8,8 @@ i don't like lua.
 
 on the other hand, javascript has a beautiful `Array` api and uses 0-based indexing.
 
-this library implements `Array`, `String`, and `Object` from javascript to make lua usable.
-it also implements python-like `range`.
+this library implements `Array`, `String`, and `Object` from javascript, and
+`range` from python to make lua usable.
 
 Array
 -----
