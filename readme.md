@@ -19,6 +19,8 @@ To achieve interoperability, `__index` and `__pairs` have not been overloaded.
 This means that you should use `array:at(0)` instead of `array[1]` and `for i,
 v in array` instead of `for i, v in pairs(array)` for 0 based indexing.
 
+you will also want to use `array:splice(idx, 0, item)` to insert `item` at `idx`. 
+
 ### usage
 ```lua
 local Array = require("Array")
