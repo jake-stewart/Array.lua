@@ -1,8 +1,10 @@
 local Array = require("Array")
 
+local Object = {}
+
 --- @param object table
 --- @return table
-local function keys(object)
+function Object.keys(object)
     local t = {}
     for key, _ in pairs(object) do
         table.insert(t, key)
@@ -12,7 +14,7 @@ end
 
 --- @param object table
 --- @return table
-local function values(object)
+function Object.values(object)
     local t = {}
     for _, value in pairs(object) do
         table.insert(t, value)
@@ -22,7 +24,7 @@ end
 
 --- @param object table
 --- @return table
-local function _entries(object)
+function Object.entries(object)
     local t = {}
     for key, value in pairs(object) do
         table.insert(t, {key, value})
@@ -32,7 +34,7 @@ end
 
 --- @param entries table
 --- @return table
-local function fromEntries(entries)
+function Object.fromEntries(entries)
     local t = {}
     for key, value in pairs(entries) do
         t[key] = value
@@ -40,9 +42,4 @@ local function fromEntries(entries)
     return t
 end
 
-return {
-    entries = _entries,
-    keys = keys,
-    values = values,
-    fromEntries = fromEntries,
-}
+return Object
