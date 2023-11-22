@@ -107,8 +107,10 @@ function Array.splice(t, start, deleteCount, ...)
     for _ = 1, deleteCount do
         table.insert(splice, table.remove(t, start))
     end
-    for i, value in pairs(...) do
-        table.insert(start + i, value)
+    if ... then
+        for i, value in ipairs({...}) do
+            table.insert(t, start + i - 1, value)
+        end
     end
     return splice
 end
@@ -169,7 +171,7 @@ function Array.filter(t, callback)
             table.insert(filtered, value)
         end
     end
-    return filtered
+    return Array(filtered)
 end
 
 ---Returns the index of the first occurrence of a value in an array, or -1 if it is not present.
@@ -359,7 +361,13 @@ local ArrayMetatable = {}
 --- @return Array
 function ArrayMetatable.__call(_, t)
     assert(type(t) == "table", "Array constructor requires table argument")
-    return setmetatable(t, Array)
+    setmetatable(t, Array)
+    for _, v in ipairs(t) do
+        if type(v) == "table" then
+            setmetatable(v, Array)
+        end
+    end
+    return t
 end
 
 return setmetatable(Array, ArrayMetatable)
