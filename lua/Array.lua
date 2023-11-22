@@ -1,6 +1,13 @@
 --- @class Array
 local Array = {}
 
+local function asArray(value)
+    if type(value) == "table" then
+        return setmetatable(value, Array)
+    end
+    return value
+end
+
 local function clampWrapIndex(n, max)
     if n <= 0 then n = max + n end
     return math.min(math.max(1, n), max)
@@ -30,11 +37,7 @@ function Array.at(t, index)
         if index < 0 then
             index = #t + index
         end
-        local item = t[index + 1]
-        if type(item) == "table" then
-            return Array(item)
-        end
-        return item;
+        return t[index + 1]
     end
     return nil
 end
@@ -45,7 +48,7 @@ end
 ---@return number
 function Array.push(t, ...)
     for _, value in ipairs({...}) do
-        table.insert(t, value)
+        table.insert(t, asArray(value))
     end
     return #t
 end
@@ -72,7 +75,7 @@ end
 ---@return number
 function Array.unshift(t, ...)
     for _, value in ... do
-        table.insert(t.value, 1, value)
+        table.insert(t.value, 1, asArray(value))
     end
     return #t
 end
@@ -95,13 +98,17 @@ end
 ---@param t table
 ---@param start number
 ---@param deleteCount number | nil
+---@param ... any
 ---@return table
-function Array.splice(t, start, deleteCount)
+function Array.splice(t, start, deleteCount, ...)
     start = clampWrapIndex(start + 1, #t)
     deleteCount = math.min(#t - start + 1, deleteCount or #t - start + 1)
     local splice = {}
     for _ = 1, deleteCount do
         table.insert(splice, table.remove(t, start))
+    end
+    for i, value in pairs(...) do
+        table.insert(start + i, value)
     end
     return splice
 end
@@ -146,9 +153,10 @@ end
 function Array.map(t, callback)
     local table = {}
     for key, value in ipairs(t) do
-        table[key] = callback(value, key - 1)
+        local mapped = callback(value, key - 1)
+        table[key] = asArray(mapped)
     end
-    return table
+    return Array(table)
 end
 
 ---@param t table
@@ -266,7 +274,7 @@ function Array.concat(t, ...)
     end
     for _, array in ipairs(...) do
         for _, value in ipairs(array) do
-            table.insert(concatenated, value)
+            table.insert(concatenated, asArray(value))
         end
     end
     return concatenated

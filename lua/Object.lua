@@ -27,7 +27,7 @@ end
 function Object.entries(object)
     local t = {}
     for key, value in pairs(object) do
-        table.insert(t, {key, value})
+        table.insert(t, Array({key, value}))
     end
     return Array(t)
 end
