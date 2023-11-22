@@ -1,20 +1,27 @@
-Array.lua
-=========
+lua-js
+======
 
-use the javascript Array api in lua and avoid one based indexed lunacy
+i don't like lua.
+
+1. one-based indexing is terrible
+2. lacks solid builtins
+
+on the other hand, javascript has a beautiful `Array` api and uses 0-based indexing.
+
+this library implements `Array`, `String`, and `Object` from javascript to make lua usable.
+
+Array
+-----
+
 does not override the `__index` method so you can pass arrays to other lua
-functions without anything breaking. if you want to index, use `Array:at()`
-
-also check out [String.lua](https://github.com/jake-stewart/String.lua).
+functions without anything breaking. this means the `[]` operator is 1-based
+indexing. use the `Array:at()` method for 0 based indexing.
 
 ### usage
-
 ```lua
 local Array = require("Array")
-
 local array = Array({1, 2, 3, 4})
-print(array:at(0))  -- prints "1"
-print(Array.at(array, 0)) -- also prints "1"
+print(array:at(0)) -- prints "1"
 ```
 
 ### supported methods:
@@ -44,6 +51,58 @@ print(Array.at(array, 0)) -- also prints "1"
  - `every`
  - `some`
  - `copyWithin`
+ - `unpack`
 
-also has `unpack`.
+String
+------
+
+### usage
+
+```lua
+local String = require("String")
+
+print(String.split("hello world", " "):at(0)) -- prints "hello"
+```
+
+### supported methods:
+ - `slice`
+ - `split`
+ - `trim`
+ - `trimEnd`
+ - `trimStart`
+ - `rep`
+ - `replace`
+ - `padEnd`
+ - `padStart`
+ - `match`
+ - `includes`
+ - `indexOf`
+ - `lastIndexOf`
+ - `toLowerCase`
+ - `toUpperCase`
+ - `startsWith`
+ - `endsWith`
+ - `substring`
+ - `at`
+
+Object
+------
+
+### usage
+
+```lua
+local Object = require("Object")
+
+local object = {
+    hello = "world"
+}
+
+print(Object.keys({hello = "world"}):at(0)) -- prints "hello"
+```
+
+### supported methods:
+ - `keys`
+ - `values`
+ - `entries`
+ - `fromEntries`
 
