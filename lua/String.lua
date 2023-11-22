@@ -1,3 +1,5 @@
+local Array = require("Array")
+
 local String = {}
 
 --- @param s string
@@ -16,15 +18,7 @@ function String.split(s, separator)
     for match in (s .. separator):gmatch("(.-)" .. separator) do
         table.insert(result, match)
     end
-    local success, array = pcall(function()
-        local Array = require("Array")
-        return Array(result)
-    end)
-    if success then
-        return array
-    else
-        return result
-    end
+    return Array(result)
 end
 
 --- @param s string
@@ -169,4 +163,18 @@ function String.at(s, index)
     return string.sub(s, index + 1, index + 1)
 end
 
-return String
+-- ensure not overwriting existing method
+for k, v in pairs(String) do
+    string[k] = string[k] or v
+end
+
+local StringMetatable = {}
+
+--- @param s string
+--- @return any
+function StringMetatable.__call(_, s)
+    assert(type(s) == "string", "String constructor requires string argument")
+    return s
+end
+
+return setmetatable(String, StringMetatable)

@@ -13,9 +13,11 @@ this library implements `Array`, `String`, and `Object` from javascript to make 
 Array
 -----
 
-does not override the `__index` method so you can pass arrays to other lua
-functions without anything breaking. this means the `[]` operator is 1-based
-indexing. use the `Array:at()` method for 0 based indexing.
+You can pass an `Array` to any lua function expecting a regular `table` and nothing will break.
+
+To achieve interoperability, `__index` and `__pairs` have not been overloaded.
+This means that you should use `array:at(0)` instead of `array[1]` and `for i,
+v in array` instead of `for i, v in pairs(array)` for 0 based indexing.
 
 ### usage
 ```lua
@@ -62,12 +64,16 @@ end
 String
 ------
 
+You can pass a `String` to any lua function expecting a regular `string` and nothing will break.
+
 ### usage
 
 ```lua
 local String = require("String")
 
-print(String.split("hello world", " "):at(0)) -- prints "hello"
+local string = String("hello world")
+
+print(string:split(" "):at(0)) -- prints "hello"
 ```
 
 ### supported methods:
@@ -90,6 +96,8 @@ print(String.split("hello world", " "):at(0)) -- prints "hello"
  - `endsWith`
  - `substring`
  - `at`
+
+the command `match` uses the `table.match`.
 
 Object
 ------

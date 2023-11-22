@@ -1,3 +1,4 @@
+--- @class Array
 local Array = {}
 
 local function clampWrapIndex(n, max)
@@ -344,9 +345,13 @@ function Array.__call(t, _, i)
     end
 end
 
-return setmetatable(Array, {
-    __call = function(_, t)
-        assert(type(t) == "table", "Array constructor requires table argument")
-        return setmetatable(t, Array)
-    end
-})
+local ArrayMetatable = {}
+
+--- @param t table
+--- @return Array
+function ArrayMetatable.__call(_, t)
+    assert(type(t) == "table", "Array constructor requires table argument")
+    return setmetatable(t, Array)
+end
+
+return setmetatable(Array, ArrayMetatable)
