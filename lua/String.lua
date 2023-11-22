@@ -168,13 +168,9 @@ for k, v in pairs(String) do
     string[k] = string[k] or v
 end
 
-local StringMetatable = {}
-
 --- @param s string
 --- @return any
-function StringMetatable.__call(_, s)
+return function(s)
     assert(type(s) == "string", "String constructor requires string argument")
     return s
 end
-
-return setmetatable(String, StringMetatable)

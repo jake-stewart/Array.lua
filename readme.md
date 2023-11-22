@@ -9,6 +9,7 @@ i don't like lua.
 on the other hand, javascript has a beautiful `Array` api and uses 0-based indexing.
 
 this library implements `Array`, `String`, and `Object` from javascript to make lua usable.
+it also implements python-like `range`.
 
 Array
 -----
@@ -28,7 +29,7 @@ local array = Array({"a", "b", "c"})
 print(array:at(0)) -- prints "a"
 
 -- prints "0 a", "1 b", "2 c"
-for i, v in array do
+for v, i in array do
     print(i, v)
 end
 
@@ -122,3 +123,32 @@ print(Object.keys({hello = "world"}):at(0)) -- prints "hello"
  - `entries`
  - `fromEntries`
 
+
+```lua
+local range = require("range")
+
+-- prints 0 to 9
+for i in range(10) do
+    print(i)
+end
+```
+
+also supports start, stop, step like python
+
+```lua
+local range = require("range")
+
+-- prints from 5, 7, 9
+-- it is `_, i` because `_` is the key (0, 1, 2) and `i` is the value (5, 7, 9)
+for _, i in range(5, 10, 2) do
+    print(i)
+end
+```
+
+range returns an array so you can do all the cool array methods
+
+```lua
+local range = require("range")
+
+range(10):map(print)
+```

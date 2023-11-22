@@ -91,7 +91,7 @@ function Array.slice(t, start, _end)
     for i = start, _end do
         table.insert(slice, t[i])
     end
-    return slice
+    return setmetatable(slice, Array)
 end
 
 ---Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
@@ -112,7 +112,7 @@ function Array.splice(t, start, deleteCount, ...)
             table.insert(t, start + i - 1, value)
         end
     end
-    return splice
+    return setmetatable(splice, Array)
 end
 
 ---This method mutates the array and returns a reference to the same array.
@@ -153,12 +153,11 @@ end
 ---@param callback fun(value: any, key: number): nil
 ---@return table
 function Array.map(t, callback)
-    local table = {}
+    local mapped = {}
     for key, value in ipairs(t) do
-        local mapped = callback(value, key - 1)
-        table[key] = asArray(mapped)
+        mapped[key] = asArray(callback(value, key - 1))
     end
-    return Array(table)
+    return setmetatable(mapped, Array)
 end
 
 ---@param t table
@@ -171,7 +170,7 @@ function Array.filter(t, callback)
             table.insert(filtered, value)
         end
     end
-    return Array(filtered)
+    return setmetatable(filtered, Array)
 end
 
 ---Returns the index of the first occurrence of a value in an array, or -1 if it is not present.
@@ -279,7 +278,7 @@ function Array.concat(t, ...)
             table.insert(concatenated, asArray(value))
         end
     end
-    return concatenated
+    return setmetatable(concatenated, Array)
 end
 
 ---Adds all the elements of an array into a string, separated by the specified separator string.
@@ -355,19 +354,16 @@ function Array.__call(t, _, i)
     end
 end
 
-local ArrayMetatable = {}
-
---- @param t table
+--- @param t table | nil
 --- @return Array
-function ArrayMetatable.__call(_, t)
-    assert(type(t) == "table", "Array constructor requires table argument")
-    setmetatable(t, Array)
+return function(t)
+    t = t or {}
+    assert(type(t) == "table",
+        "Array constructor requires table or nil argument")
     for _, v in ipairs(t) do
         if type(v) == "table" then
             setmetatable(v, Array)
         end
     end
-    return t
+    return setmetatable(t, Array)
 end
-
-return setmetatable(Array, ArrayMetatable)
